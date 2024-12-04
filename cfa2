@@ -1,0 +1,118 @@
+ec2>
+select the region based on 4 parameters
+(region)
+us east 1(n. virginia)>
+launch instance>
+name>
+cafeweeb_server
+app and os image>
+ubuntu>
+ubuntu 22.04 lts>
+confirm>
+t2.micro> --------t is for general purpose. higher the gen, better i.e t1,t2,t3,.... .micro, smalll, large
+key value pair>
+////(pem file for ubuntu) (.ppk file for windows)
+vockey>
+//network settings>
+//edit>
+launch>
+view insatnces>
+////how to connect to instance
+////we had selected the vockey
+open the lab>
+details>
+download pem>
+
+open the ec2>
+select the website name>
+copy public ip address>
+
+
+actions>
+connect>
+////shows how to connect
+
+http://172.16.51.41:8000/dynamic_website_deploy_steps.sh
+
+$ cd Downloads/
+$ sudo chmod 600 labsuser.pem 
+$ sudo ssh -i labsuser.pem ubuntu@3.83.145.211
+$ ip a
+172.31.92.224
+$ sudo apt-get update
+$ sudo apt-get install apache2 php libapache2-mod-php php-mysql mysql-server mysql-client -y
+$ sudo systemctl status apache2
+
+another way to check whether the apache2 is working
+https://3.83.145.211
+but there is no port, is restricted due to security grp
+inbound rule is to check which is allowed into out s/m
+
+security grp>
+
+
+$ sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git
+$ ls
+$ sudo mkdir /var/www/html/cafeapp
+$ sudo cp -rf mompopcafe /var/www/html/cafeapp. 
+$ sudo nano /etc/apache2/sites-available/000-default.conf 
+	ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/cafeapp
+$ sudo systemctl restart apache2
+$ sudo mysql -u root -p
+
+mysql> create database mom_pop_db;
+
+mysql> create user 'msis'@'localhost' idendified with mysql_native_password by 'Msois@123';
+
+mysql> alter  user 'msis'@'localhost' idendified with mysql_native_password by 'Msois@123';
+mysql> grant all privileges on mom_pop_db.* to 'msis'@'localhost' with grant option;
+
+mysql> exit
+
+$ sudo mysql -u msis -p
+$ Password:Msois@123
+
+mysql> show databases;
+
+mysql> use mom_pop_db;
+
+mysql> source Cafe_Dynamic_Website/mompopdb/create-db.sql;
+
+mysql> show tables;
+
+mysql> exit
+
+$ cd /var/www/html/cafeapp
+
+$ sudo nano getAppParameters.php
+php
+  // Get the application environment parameters from the Parameter Store.
+  //include ('getAppParameters.php');
+  $showServerInfo = "false";
+  $timeZone = "America/New_York";
+  $currency = "$";
+  $db_url = "localhost";
+  $db_name = "mom_pop_db";
+  $db_user = "msis";
+  $db_password = "Msois@123";
+  
+  // Display the server metadata information if the showServerInfo parameter is true.
+  //include('serverInfo.php');
+
+$ sudo systemctl restrat apache2
+
+http://<public ip> in browser
+
+------------------------------------------------
+name>
+cafestaticapp
+
+22.04>
+t2.micro>
+
+keypair>
+vockey>
+
+launch on default vpc
+

@@ -1,0 +1,164 @@
+storage
+cloud storage is secure, reliable, scalable as compared to on premises
+
+core aws services
+vpc
+ec2
+iam
+db
+storage
+
+
+-------------------------------------------------------
+ebs - persistent block storage
+virtual hard disk
+
+	block storage
+	only a bit of data can be changed
+	only one device at a time
+	low latency
+	durable
+	expensive
+	
+	object storage
+	entire data can be modified
+	large storage
+	
+	persistent
+	data is present even if power goes off. it is non volatile
+
+*check block storage vs object storage
+
+instance store - temp data
+can be used as a boot volume
+ebs can also be used as a boot volume
+to recreate this in anothe rregion, we need to take a snapshot
+
+$ file -s <name of file> --- to check the file s/m existence
+
+
+baseline snapshot -- first snapshot taken on volume, it captures everything
+new snapshots only takes the sanpshot of the difference b/w new snapshot and baseline snapshot
+
+
+ebs pricing
+amount of volumes in GB in a month
+amount of volumes in GB per I/O operations
+
+we need to delete older snapshots as it costs money
+
+
+---------------------------------------
+s3 - object storage
+companies looking for simple secure storage where they wanted the cust to upload the data. this can be analysed and managed at a high scale
+can upload any type of object/data
+it is fully managed storage
+abstracted service
+highly durable upto 11 9s(99.999999999)
+highly availabe upto 4 9s (99.99)
+virtually unlimited bucket, but the max size of a single object is 5TB
+data encryption can be done at a low cost
+event notification can be set to alert any event (such as put, get, post, delete)
+
+iam and acl is used to determine who can do what to a bucket
+
+s3 storage classes - to meet different requirements of the user
+
+-whenever high available, durable, low latency, performance, throughtput for freq accessed data, if that kind of application is needed, s3 standard is to be used (4 9s)
+-for data that is less frequently accessed, but it is imp data and low latnecy is needed (such as log data), we need to use s3 standard infrequent access (3 9s)
+-dont know when the data is accessed, for data that can be easily recreated, even if loss of data is not a problem i.e less durable, then we use one zone infrequent access data. only spanned across 1 az
+-s3 intelligent tiering first puts the data to s3 std, then monitors the data and moves data to std infreq access. this is to save money and used when the frequency of usage of data is not known
+-data used to preserve for data and those that can be accessed once a year i.e data archiving, we use s3 glacier
+3 mechanisms are provided to read and get the data for glacier
+expedited method 1-5mins (expensive)
+standard method 3-5hrs
+bulk method 5-12hrs
+-to analyse right cost and store the data for long time we use s3 glacier deep archive
+
+aws promises reliabiity and availability as the data is spanned across 3 az
+
+
+bucket name is unique as it is a part of an end point. only use lower case char and numbers
+2 types of end point
+for host website
+for accessing 
+
+automatic scaling happens in s3
+
+bucket can be accessed via aws mgmt console, aws cli, aws sdk
+
+for pricing there are 3 factors
+amount of GB per month
+for action performed on object /type of request(put, copy, post, list, get)
+amount of data transfered to another service in another region(not for same region)
+aso based on the type of servce, s3 std is expensive
+
+
+------------------------------------------------------------
+amazon elastic file - efs
+n/w attached file
+share data across multiple vm
+elastic storage that can perform multiple s/m for read and write
+simple scalable elastic file storage
+file accessible in n/w via ip address
+low latency
+
+-features
+provisions file storage
+file storage is used for big data, live streaming, batch processing
+can scale upto petabytes
+shared storage
+elastic capacity
+supports nfs
+compatible with linux based ami
+
+--------------------------------------------------------------
+s3 glacier
+low cost, secure, durable storage for data archiving
+archive is the data that are being archived
+vault is a container to store data
+vault policy is to determine which user can perform what task
+only 1 vault policy per vault
+vault lock policy is for prevent policy being altered
+
+3 ways to retrieve data back
+expedited method 1-5mins (expensive)
+standard method 3-5hrs
+bulk method 5-12hrs
+-to analyse right cost and store the data for long time we use s3 glacier deep archive
+
+in managemnt console we can only create, delete and update a vault (and atttach a policy)
+
+life cycle policy is an automate cycling of data through different storage classes based on importance
+amzon s3 life cycle enables you to delete or move objects based on age
+
+-------------------------------------------------
+
+
+
+
+
+container services
+-------------------
+container os lvl virtualization
+data is packaged
+at h/w lvl, instance set lvl, api lvl, os lvl, desktop lvl
+lightweight as it has only base version of os as ooposed to vm which has complete os
+
+-benifits
+envt consistency
+operational efficiency
+quickly release diff versions
+developed friendly
+
+check vm vs container
+
+-------------------
+ecs
+fully managed container service
+
+-----------------------
+eks
+
+-------------------
+ecr

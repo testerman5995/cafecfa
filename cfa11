@@ -1,0 +1,189 @@
+aws architectural lab>
+module 14>
+optional guided lab>
+
+cloud9>
+open>
+$ curl -s https://aws-tc-largeobjects.s3.us-west-2.amazonaws.com/CUR-TF-200-ACACAD-3-113230/19-lab-mod14-guided-ECS/s3/lab-files-ms-node-js.tar.gz | tar -zxv
+$ ls
+$ cd 1-no-container/
+$ ls
+$ cat package.json
+$ sudo npm install
+$ npm start
+
+new terminal>
+$ curl http://localhost:3000/api/users
+$ curl http://localhost:3000/api/users/1
+$ curl http://localhost:3000/api/threads
+$ curl http://localhost:3000/api/threads/1
+$ curl http://localhost:3000/api/posts/in-thread/1
+
+prev terminal>
+$ cd
+$ cd environment/
+$ ls
+$ cd 2-containerized-monolith/
+$ ls
+$ cat Dockerfile 
+$ docker build -t mcb-repo:latest .
+
+
+
+ecr>
+create>
+repo name>
+mcb-repo
+create>
+mcb-repo>
+view push cmd>  ---steps are mentoined
+
+
+cloud 9>
+$ aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 955899586459.dkr.ecr.us-east-1.amazonaws.com
+$ docker build -t mcb-repo .
+$ docker tag mcb-repo:latest 955899586459.dkr.ecr.us-east-1.amazonaws.com/mcb-repo:latest
+$ docker push 955899586459.dkr.ecr.us-east-1.amazonaws.com/mcb-repo:latest
+
+
+ecr>
+refresh page>
+
+
+ecs>
+name>
+mcb-cluster
+uncheck fargate>
+check ec2>
+container ami>
+amazon linux 2023>
+ec2 instance type>
+t2.medium>
+EC2 instance role>
+emr_ec2_default>
+min>
+2
+max>
+2
+key pair>
+vockey>
+volume size>
+50
+vpc>
+lab vpc>
+security grp>
+check the one with hashcode>
+uncheck default securoty grp>
+
+refresh>
+click on mcb_cluster>
+infrastructure>
+
+tash definition>
+creat new>
+mcb-task
+uncheck fargate>
+check ec2>
+container>
+name>
+mcb-monolithic
+
+
+ecr>
+copy uri>
+
+
+ecs>
+image uri>
+paste>
+container port>
+3000
+resource allocation>
+input the prompted numbers>
+create>
+
+
+
+ecs>
+cluster>
+service>
+create>
+check specify revisions>
+family>
+mcb-task>
+name>
+mcb-service
+networking>
+vpc>
+lab vpc>
+security grp>
+select the one with hashcode>
+load balancer type>
+application lb>
+lb name>
+mcb-elb
+create>
+
+
+
+ec2>
+load balancer>
+mcb-elb>
+copy dns name>
+
+
+
+--browser
+paste dns name>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------------------------------
+ecr>
+repo>
+create>
+mcb-post-repo
+create>
+create>
+mcb-threads-repo
+create>
+create>
+mcb-users-repo
+create>
+
+
+
+cloud9>
+$ cd
+$ cd environment/
+$ cd 3-containerized-microservices/
+$ cd users/
+$ ls
+$ cat Dockerfile 
+$ docker build -t mcb-users-repo:latest .
+
+
+
+ecr>
+view push cmd for each of the services>
+
+
+cloud9>
+paste the commands for users
+
+$ cd ../posts
+paste the cmds for posts
+
+//cname -- canonical name
+//aname is for port number

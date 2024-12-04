@@ -1,0 +1,50 @@
+iam is used to restrict user in a particular acc
+aws organiszation, policies can be set up to restrict user or access to resouces
+
+vpc sharing
+owner creates vpc and shares it across other users
+
+vpc peering
+n/w connection that connects b/w 3 vpc
+
+aws site - site vpn
+create a vpn gateway
+attach it to vpc
+config the costomer gateway - aws rosource where details are recorded
+
+aws direct connect (dx)
+pvt optical fibre connction from corporate data center to nearest dx. doestn use noermal / public netwrok, uses private internet (/cable)
+
+vpc endpoint
+interface endpoint
+gateway endpoint
+aws services when connecting to s3 or other resources, we can use endpoint
+uses pvt n/w
+
+aws transit gateway
+
+security grp
+works in instance lvl
+attached to instance
+they are statefull
+allow rules
+
+nacl
+subnet lvl
+allow and deny rules
+stateless
+
+**route53 uses
+
+check these - cnames, anames
+
+dns failover 
+
+aws cloudfront
+
+elb
+
+cloudwatch
+
+ec2 autoscaling
+

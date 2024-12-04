@@ -1,0 +1,205 @@
+create an isolated network to launch ec2
+resouces put inside vpc is accesible within that vpc ------virtUAL PVT CLOUD, where  isolated n/w SPACE CAN BE created acrosss all availability zones
+aubnetting ---divide a n/w, create a layout and divide into sites
+
+start lab>
+vpc>
+create vpc>
+vpc & more>
+name tag>
+cafestagevpc
+
+	10.0.0.0/16
+	first 3 digit ---n/w identifier
+	4th digit ---identify unique host within server
+	/16 ---subnet mask
+
+	10.0.0.0/16
+	32-16=16
+	2^16=65536
+	
+custom subnets cidr>
+public us-east-1a>
+10.0.0.0/24    ---------shouldnt be greater than main cidr ip
+
+	10.0.0.0/24
+	32-24=8
+	2^16=256
+
+public us-east-1b>
+10.0.2.0/24
+	
+	255.255.255.0 = /16
+	255.255.0.0 = /24
+
+private us-east-1a>	
+10.0.1.0/24
+private us-east-1b>
+10.0.3.0/24
+
+nat gateway> ----Choose the number of Availability Zones (AZs) in which to create NAT gateways. 
+1 az>
+VPC endpoint>
+None>
+
+view vpc>
+filer by vpc>
+select new>
+
+
+ec2>
+	we need to launch2 instances for public and pvt
+launch instance>
+name>
+webserver>
+ami>
+ubuntu>
+instance type>
+t2.micro>
+key pair>
+vockey>
+network settings>
+cafestagevpc>
+subnet>
+public subnet>
+	auto assign is disabled as it is our own vpc
+auto assign>
+enable>
+add new secutiry grp rule>
+http>
+source type>
+anywhere>
+launch instance>
+instances>
+launch instance>
+db_server
+ami>
+ubuntu 22.04>
+key pair>
+vockey>
+n/w settings>
+vpc>
+cafestagevpc>
+private>
+launch>
+
+
+terminal
+
+$ cd Downloads
+$ ls
+$ sudo rm -rf labsuser.pem -----------  we need to delete this as we are downloading again
+$ ls
+labuser.pem
+$ sudo chmod 600 labuser.pem
+
+instance>
+cafe>
+select public ip addrss>
+
+$ sudo ssh -i labuser.pem ubuntu@<public ip>
+$ sudo apt-get update
+$ sudo apt-get install apache2 libapache2-mod-php php php-mysql mysql-client
+$ sudo systemctl status apache2
+$ ls
+$ exit
+
+instance>
+webserver>
+select public ip addrss>
+
+***********************
+$ sudo apt-get install apache2 libapache2-mod-php php php-mysql mysql-client
+$ sudo systemctl status apache2
+$ exit
+
+$ sudo scp -i labsuser.pem labsuser.pem ubuntu@<ip adrs>:/home/ubuntu/.
+$ sudo ssh -i labsuser.pem ubuntu@<public ip adrs>
+$ ls
+$ sudo chmod 600 labsuser.pem
+
+//dbserver>
+//copy pvt address>
+
+//$ sudo ssh -i labsuser.pem ubuntu@<pvt address>
+//$ ip a
+
+
+
+/////web layer setup
+by default mysql is accessible only via local host
+
+
+copy web server ip>
+
+$ sudo ssh -i labsuser.pem ubuntu@<pub address>
+$ sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git
+$ cd Cafe_Dynamic_Website
+$ ls
+$ sudo mkdir /var/www/html/cafeapp
+$ sudo cp -rf mompopcafe/* /var/www/html/cafeapp/.
+$ sudo nano /etc/apache2/sites-available/000-default.conf
+	DocumentRoot /var/www/html/cafeapp
+$ sudo systemctl restart apache2
+
+copy public web server ip >
+-----browser
+https:/<ip>
+
+$ cd ..
+$ ls
+	labsuser.pem
+$ ssh -i labsuser.pem ubuntu@<pvt ip address of db server i.e 10.0.1.109>
+$ sudo apt-get update
+$ sudo apt-get install mysql-server mysql-client
+$ sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git
+$ ls
+$ sudo nano /etc/mysql/mysql.conf.d/mysqld.conf
+	bind-address = 127.0.0.1
+	change the above>
+	bind-address = 0.0.0.0
+$ sudo systemctl restart mysql.service
+$ sudo  mysql -u root -p
+
+mysql> create database cafedb;
+mysql> CREATE USER 'msis'@'%' IDENTIFIED WITH mysql_native_password BY 'Msois@123';  ----% means user can access by localhost or server
+mysql> ALTER USER 'msis'@'%' IDENTIFIED WITH mysql_native_password BY 'Msois@123';
+mysql> GRANT ALL PRIVILEGES ON cafedb.* TO 'msis'@'%' WITH GRANT OPTION;
+mysql> exit;
+
+$ exit
+//we're back to web server
+$ sudo mysql -u msis -h 10.0.1.109 
+
+webserver>
+copy security grp id>
+//we need to allow traffic
+db_server>
+security grp>
+edit inbound rule>
+add rule>
+type>
+mysql>
+source type>
+custom>
+source>
+paste the copied security grp>
+save rules>
+
+$ sudo mysql -u msis -h 10.0.1.109 
+
+mysql> show databases;
+mysql> use cafedb;
+mysql> source Cafe_Dynamic_Website/mompopdb/create-db.sql;
+mysql> exit;
+
+$ cd /varwww/html/cafeapp
+$ ls
+$ sudo nano getAppParameters.php
+	db_url="10.0.1.109";
+	db_name="cafedb";
+	db_user="msis";
+$ sudo systemctl restart apache2
+
+----browser
+refresh

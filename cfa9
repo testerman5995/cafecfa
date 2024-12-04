@@ -1,0 +1,161 @@
+to create: highly available, scalable infrastructure
+
+Academy Cloud Foundations>
+Lab - 6 Scale & Load Balance your Architecture >
+start lab>
+
+	3 services:
+	elastic load balancer
+		-target grp --grp of web servers to which the load balancer is directed
+	auto scaling
+		-launch template
+	cloud watch
+
+ec2>
+instances>
+web server 1>
+public ip <copy>>
+
+--browser
+paste
+
+//create a snapshot
+actions>
+image & template>
+create img>
+img name>
+myami
+desc>
+this is an ami for launch template
+add tag>
+myami
+create>
+
+//create a target grp 
+load balancing>
+target grp>
+create>
+instances>
+grp name>
+ELBtargetgrp
+vpc>
+lab vpc>
+tag>
+add tag>
+ELBtargetgrp
+next>
+create>
+
+//launching a load balancer
+load balancing>
+load balancer>
+create>
+application load balancer>
+name>
+MyELB
+vpc>
+lab vpc>
+az>
+us east 1 <check>>
+subnet>
+public subnet 1>
+us east 2 <check>>
+subnet>
+public subnet 2>
+security grp>
+default <uncheck>>
+web security grp <check>>
+Listeners and routing>
+Default action>
+ELBtargetgrp>
+Load balancer tags>
+tag>
+MyELB
+create>
+
+///////////canonical names / c names - --redirect 
+
+instances>
+launch templates>
+create>
+name>
+MyAutoLaunchTemplate
+desc>
+This is a launch template for cafe app
+auto scaling guidance>
+launch template>
+my ami>
+ami>
+myami>
+type>
+t2.micro>
+key pair>
+vockey>
+//n/w setting>
+//pvt subnet>
+//	new tab>
+//	vpc>
+//	vps>
+//	check if the alst 4 digits of vpc are same>
+common security grp>
+web security>
+create>
+
+launch template>
+<check>>
+actions>
+createauto scaling grp>
+name>
+MyASG
+next>
+n/w>
+vpc>
+lab vpc>
+az and subnets>
+select both pvt subnets>
+next>
+Load balancing>
+Attach to an existing load balancer>
+attach existing>
+existing target grp>
+ELBtargetgrp>
+health check>
+turn on>
+turn on>
+Additional settings>
+Monitoring>
+Enable group metrics collection within CloudWatch <check>>
+next>
+Desired capacity>
+2
+Scaling>
+Scaling limits>
+min>
+2
+max>
+6
+Automatic scaling >
+Target tracking scaling policy <check>>
+instance warmup>
+60
+next>
+next>
+tag>
+MyWebServers
+next>
+create>
+
+ec2>
+instances>
+--created
+
+target grp>
+ELBtargetgrp>
+refersh page>
+
+load balancers>
+copy dns link >
+
+--browser 
+paste
+

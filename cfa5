@@ -1,0 +1,126 @@
+AWS Academy Cloud Foundations
+Lab - 4 Working with EBS 
+start lab>
+ec2>
+instances>
+lab <check>>
+
+volume>
+create volume>
+size>
+1
+az>
+//create the volume in the same az as that of ec2
+tag>
+key>
+name
+value>
+myvolume
+create>
+
+myvolume <check>>
+actions>
+attach vol>
+instance>
+lab>
+device name>
+/dev/sdb>  -----/dev is for linux
+
+instance>
+lab <check>>
+public ip addr <copy>>
+
+$ cd Downloads
+//delete pem file if already exists
+//download .pem file form lab
+$ sudo chmod 600 labsuser.pem
+$ sudo ssh -i labsuser.pem ec2-user@98.82.8.9
+
+go back to aws ec2>
+connect>
+
+$ cat /etc/os-release
+$ sudo yum update
+$ sudo yum install httpd --------httpd is for apache
+$ sudo systemctl status httpd
+$ sudo systemctl start httpd
+
+	$ df -h
+	$ free -h
+	$ lsblk
+	//to check the memory of complete s/m
+	
+$ df -h
+	/dev/xvda1      8.0G  1.6G  6.4G  20% /    ------------the prev /dev/sdb file is changed
+$ sudo file -s /dev/xvd <tab>
+$ sudo file -s /dev/xvdb  --------------------------- to check is block device has a  file s/m or not
+	/dev/xvdb: data   ----- no file s/m
+$ sudo file -s /dev/xvda
+	/dev/xvda: DOS/MBR boot sector, extended partition table (last)
+$ sudo mkfs -t ext3 /dev/xvdb  ---------------to format the file s/m
+$ sudo file -s /dev/xvdb
+	/dev/xvdb: Linux rev 1.0 ext3 filesystem data, UUID=1abc5eb0-c39d-4632-ae02-fd30c86eb973 (large files)
+//this remains untill we refersh
+//for permanent change, we can write to this file ---- /etc/fstab
+$ df -h   ----------not mounted, so file cannot be seen
+$ sudo mkdir /mnt/myvolume ----we mount here
+$ sudo mount /dev/xvdb /mnt/myvolume/
+$ df -h
+	/dev/xvdb       975M   60K  924M   1% /mnt/myvolume
+
+$ cd /mnt/myvolume/
+$ sudo touch mydata
+$ sudo cat > mydata 
+	-bash: mydata: Permission denied
+$ sudo chown -R ec2-user:ec2-user .
+$ sudo cat > mydata 
+	this is an example of ec2 user
+	^C
+$ cat mydata 
+	this is an example of ec2 user
+
+//take backup of data or volume and restore it to another instance
+//we capture a snapshot and create a new vol and attach the volume 
+//we thne check of the data is restored
+
+volume>
+actions>
+create snapshot>
+desc>
+this is a snapshot of myvolume
+tag>
+key>
+Name
+value>
+myvolumesnapshot
+creat>
+
+snapshots>
+//create a new vol from snapshot from and then attaching it
+myvolumesnapshot <check>>
+actions>
+create a vol>
+tag>
+key>
+Name
+Vlaue>
+restorevolumesnapshot
+create>
+
+volume>
+restorevolumesnapshot>
+actions>
+attach vol>
+
+
+
+$ cd /mnt/myvolume/
+$ ls
+	lost+found  mydata
+$ sudo mkdir /mnt/restorevolume
+$ sudo file -s /dev/xvdc
+$ sudo mount /dev/xvdc /mnt/restorevolume/
+$ df -h
+$ cd /mnt/restorevolume
+$ ls
+$ cat mydata

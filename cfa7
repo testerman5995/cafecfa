@@ -1,0 +1,72 @@
+AWS Academy Cloud Architecting
+Guided lab: Introducing Amazon Elastic File System (Amazon EFS)
+
+start lab>
+ec2>
+instances>
+<check>>
+security>
+security grp<copy>>
+
+security grp>
+create>
+Security group name>
+EFSmounttargetsg
+vpc>
+lab vpc>
+inbound rule>
+add>
+nfs>
+paste the security grp>
+
+search>
+efs>
+create file s/m>
+name>
+myEFS
+customise>
+enable auto backup<unchceck>>
+enable encryption<uncheck>>
+tag>
+name>
+myEFS
+next>
+
+mount target>
+security grp>
+uncheck the default sg and select EFSmounttargetsg>
+next>
+
+file system>
+myEFS>
+attach>
+copy nfs client>***
+
+
+$ cd Downloads
+//download pem file
+$ sudo chmod 600 labsuser.pem 
+$ sudo ssh -i labsuser.pem ec2-user@<ec2 copied public ip addr>
+
+$ sudo yum update
+$ sudo yum install amazon-efs-utils
+$ sudo mkdir /mnt/efs
+	//***paste the copied command change to /mnt/efs at the end
+$ sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0c0f675af28718ba8.efs.us-east-1.amazonaws.com:/ /mnt/efs
+$ sudo df -h
+$ cd /mnt/efs
+$ ls
+
+$ sudo touch data
+$ sudo cat > data
+$ sudo chown -R ec2-user:ec2-user .
+$ sudo cat > data
+test data
+$ cd
+$ sudo mkdir /mnt/test
+	//***paste the copied cmd, replace the end with /mnt/test
+$ sudo mount -t nfs4 -o nfsvers=4.1,rsize=1048576,wsize=1048576,hard,timeo=600,retrans=2,noresvport fs-0c0f675af28718ba8.efs.us-east-1.amazonaws.com:/ /mnt/test
+$ cd /mnt/test
+$ ls
+$ cat data
+

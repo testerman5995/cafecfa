@@ -1,0 +1,204 @@
+aws lambda
+-run your code w/o managing the server
+-connnect sto db and gets details
+-lambda instance can be triggered based on 1)event 2)schedule
+
+ec2>
+instances>
+mom pop cafe>
+public ip>
+open i browser>  ---prod environment is shown, db is empty
+
+iam>
+roles>
+sales
+sales analysis report>
+trust relationship>  --shows the lambda fn
+permission>  --2 policies are shown
+aws lambda basic run>  ---mandatory policy/basic rule , used to write and read to cloudwatch
+aws lambda access run>  ----allow lambda fn to create its own interace
+roles>
+sales
+trust rela>
+amazon sns access> -- grants full permision to read&write
+amazon ssm read only>  --grants read only permission to systems mngr
+aws lambda role>  ---shows the role
+
+
+lambda>
+//create a layer  so as to attach layer to multiple lambda fn
+create layeer>
+mymysqllayer
+upload the zip file>
+runtime>
+python 3.8>
+create>
+dashboard>
+functionS>
+create fn>
+
+fn name>
+salesReportAnalysisDataExtractor  ---initial lambda fn name, the lambda fn looks for the same name
+runtime>
+py 3.8>
+permission>
+change default role>
+use existing role>
+salesAnalysisReportEDRole>
+create>
+
+add a layer>
+choose layer>
+custom layer>
+add>
+
+code>
+code src>
+upload zip>
+salesReportAnalysisDataExtractor.zip>
+runtime setting>
+edit>
+handler>
+salesReportAnalysisDataExtractor.lambda_handler
+save>
+
+functions>
+config>
+select vpc>
+edit>
+subnet>
+public subnet 1>
+security grp>
+mompopcafewebsecurity>
+save>
+config test event?
+create new>
+name>
+MytestDEvent
+event>
+**paste from activity, edit as below>
+---we should never enter credentials in ec2, we do it in parameter store
+parameter store>
+value>
+copy>
+dburl <paste>
+//same for others
+
+
+ec2>
+instane>
+security grp>
+add rule>
+type>
+mysql>
+sourec>
+anywhere>
+save>
+
+
+lambda>
+code>
+test>
+//shows the orders, order in the website
+
+----------------------------------------------------------------------------------------------------------------------------------------------
+$ cd Downloads
+$ sudo rm -rf labsuser.pem
+//download pem file from lambda
+$ sudo chmod 600 labsuser.pem
+
+instances>
+cli host>
+copy public ip>
+
+$ sudo ssh -i labsuer.pem ec2-user@< paste ip>
+
+$ aws configure 
+	access id: 123
+	secret access id: 123
+	default region: us-east-1
+	default o/p format: json
+		// aws cli in activity/lab
+		//details
+		//show>
+		//you get access key and secret access id
+		//copy
+$ sudo nano /home/ec2-user/.aws/credentials
+	//paste the details as per the cli from activity
+	
+$ aws ec2 describe-instances
+$ aws s3 ls
+
+	//activity
+	//copy cmd
+	//aws lambda create fn
+
+	iam>
+	role>
+	salesanalysis>
+	arn>  --amazon resource no.
+	copy>
+
+$ <paste line by line (change py 3.8 and paste the role as copied)>
+$ ls
+$ cd activity-files
+$ ls
+$ <paste line by line (change py 3.8 and paste the role as copied)>
+
+lambda>
+fn>
+//changes are shown
+
+sns/simple notif service>
+next step / create>
+std>
+name>
+myprodsales>
+display name>
+prod_sales
+create>
+
+arn>
+copy>
+protocol>
+email>
+endpoint>
+<my mail #sreepathy.hv>@manipal.edu
+create>
+
+check mail>
+confirm>
+
+lambda>
+fn>
+config>
+edit env variable>
+key>
+topicARN
+value>
+paste the arn value>
+
+sales anaysis report>
+code>
+test>
+create new>
+Mainevent
+save>
+test>
+
+check mail>
+
+
+lambda>
+add trigger>
+select src>
+event bridge>
+create rule>
+name>
+Mysalesreport
+desc>
+Mysalesreport
+schedule expresiion>
+cron(0 45 11 * * *)
+add>
+

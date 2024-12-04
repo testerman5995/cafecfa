@@ -1,0 +1,246 @@
+search use case
+
+console>
+
+ec2> 
+copy public ip>
+paste in browser>---to check if the site is working fine
+
+systems mngr>
+parameter store>--to check the server details
+
+route53>
+health check>
+name>
+primary_health
+protocol>
+ip address>
+paste the primary instance public ip from ec2>
+post>
+80
+path>
+mompopcafe
+adv config>
+fast>
+failure threshold>
+2
+next>
+--------this send health check every 10s, if it doesnt respond, it is unhealthy
+alarm>----------send 2 times
+yes>
+new sns topic>
+name>
+primary_health
+rec email>
+xyz@mail.com
+ok>
+
+hosted zone>
+record>
+record name>
+www
+record type>
+a- xxx >
+alias>
+paste ip addr of primary server>
+ttl>
+15
+routing policy>
+failover>
+record type>
+primary>
+health check>
+primary_health>
+id>
+primary
+create record>
+
+select the record>
+copy the record name>
+link/mompopcafe in browser>
+
+copy the ip address of instance 2 from ec2>
+create a record>
+www
+record type>
+a- xxx >
+alias>
+paste ip addr of secondary server>
+ttl>
+15
+routing policy>
+failover>
+record type>
+secondary>
+create record>
+
+health checks>-check the health of site
+
+///to check the working
+instance1>
+stop instance>
+//if we access this site, itll be unavailable
+
+check in health check>
+
+refresh the link/mompopcafe in browser>
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------
+MANAGED DB INSTEAD OF PRIVATE DB SERVER
+aurora- aws 
+managed service--- rds
+
+vpc>
+create>
+name_tag>
+lab_vpc
+cidr>
+10.0.0.0/16
+az>
+2>
+custom az.
+10.0.0.0/24
+10.0.2.0/24
+10.0.1.0/24
+10.0.3.0/24
+nat gateway>
+in 1 az>
+vpc endpoint>
+none>
+ok>
+
+///////////////route -n  -----for route table path
+vpc>
+select>
+labvpc>
+select public route table>
+
+ec2>
+launch>
+name>
+web
+.
+.
+n/w setttings>
+vpc>
+labvpc
+subnet>
+public>
+auto assign>
+enable>
+add>
+type>
+http>
+source>
+anywhere>
+launch>
+
+instance>
+web>
+
+$ cd
+$ Downloads/
+$ sudo rm -rf labsuser.pem
+
+learner lab>
+aws details>
+download pem>
+
+$ sudo chmod 600 labsuser.pem
+$ sudo ssh -i labsuser.pem ubuntu@<ip>
+$ sudo apt-get update -y
+$ sudo apt-get install apache2 mysql-client -y
+
+
+rds>
+create db>
+std create>
+mysql>
+template> //imp
+free-tier> //imp
+settings>
+db instance>
+cafedb
+master user>
+admin
+p/w>
+Msios@123
+db instance class>
+burstable>
+db.t3.micro>
+storage>
+connectivity>
+---connect to ec2 instance is to be done later
+pvt cloud vpc>
+labvpc>
+vpc security grp>
+create new>
+mydbsg
+tags>
+key>
+Name
+value>
+cafedb
+db authentication>
+p/w authentication>
+create>
+
+databases>
+cafedb>
+security>
+click on link>
+edit inbound rule>
+source type>
+anywhere>
+save>
+
+rds>
+database>
+copy endpoint port>
+
+$ sudo mysql -u admin -h <paste domain name> -p
+mysql> create database mom_pop_db; //db name same as the db name in the .sql file in the mompopdb file
+mysql> GRANT AL PRIVILEGES ON mom_pop_db.* TO 'admin'@'%' WITH GRANT OPTION;
+mysql> exit;
+
+$ //clone the repo
+$ cd to clone repo to mompopdb (create_db.sql)
+$ sudo mysql -u admin -h <paste domain name> -p
+mysql> use mom_pop_db;
+mysql> source create_db.sql;
+mysql> exit;
+
+$ sudo mkdir /var/www/html/cafeapp
+$ sudo cp -rp mompopcafe/* /var/www/html/cafeapp
+$ cd /var/www/html/cafeapp
+$ sudo nano /etc/apache2/sites-available/000-default.conf
+DocumentRoot /var/www/html/cafeapp
+
+$ sudo systemctl restart apache2
+$ sudo nano getAppParameters.php
+change credentials
+db_url paste the rds endoint
+
+$ sudo systemctl restart apache2
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

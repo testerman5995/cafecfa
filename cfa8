@@ -1,0 +1,83 @@
+foundation>
+iam lab>
+console>
+iam>
+users>
+user1>
+
+user grp>
+s3 support>
+///////policy>  ----used to create authorization
+///////effect, action, role
+add user>
+user 1<check>>
+add>
+user 1>
+
+users>
+user 2>
+groups>
+add usr to grp>
+ec2 support>
+add>
+
+users>
+user 3>
+groups>
+add usr to grp>
+ec2 admin support>
+add>
+
+user>
+user 1>
+security cred>
+copy link>
+
+--browser
+--pvt window
+paste link>
+iam user>
+user-1
+p/w>
+Lab-Password1
+s3>
+buckets>  --------no upload athority
+logout>
+
+user>
+user 2>
+security cred>
+copy link>
+
+--browser
+--pvt window
+paste link>
+iam user>
+user-2
+p/w>
+Lab-Password2
+ec2>
+instances>
+stop instance> ----cannot stop
+logout>
+
+user>
+user 3>
+security cred>
+copy link>
+
+--browser
+--pvt window
+paste link>
+iam user>
+user-3
+p/w>
+Lab-Password3
+ec2>
+instances>
+stop instance> ----can stop here
+logout>
+
+
+
+

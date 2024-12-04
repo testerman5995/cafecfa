@@ -1,0 +1,2 @@
+run cmd - execute cmds on set of ec2 servers without logging into it via ssh 
+user data - run sonly once at the final stage of booting

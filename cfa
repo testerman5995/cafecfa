@@ -1,555 +1,735 @@
-1.	Design a Bullet Proof Architecture for hosting a Café Static website for a Business case using AWS Services. 
-Note: Architectural Solution should record/document Content Distribution Globally across all region and provide solution for accessing site via domain name (No need of implementing this feature) 
+lamp stack
+l-linux
+a-apache
+m-mariya/MySQL
+p-php
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+black--> checks correctness, pylint--> formatting of code, unused code
+
+ mtechchandan@gmail.com
+ 7992256272
+ 
 
 
-S3 BUCKET
+ctrl+alt+t
+msis@msis-Lenovo-V310z:~$ 
 
-Launch AWS Academy Learner Lab>
-start lab>
-once light turns green, click it
-preference>
-click on show ......
-search s3>
-s3>
-create bucket>
-bucketname> msiscafe.com ////name should be unique globally
-block public> uncheck all and acknowledge
-////add tag> key -> name value -> msiscafe
-create>
-view details>
-///////s3 bucket is used to host static website, streaming website etc where there is no much user involvement
-clone git source code -----https://github.com/sreepathysois/cafe-static-website.git
-objects>
-add folder>add all the folder
-upload>
-bucket>
-click on link>
-properties>
-static website hosting> enable>host
-specify index
-save>
-bucket>
-objects>
-select all>
-actions>
-make public>--here acl is disabled, to enable that,
-bucket>
-permissions>
-object ownership>
-edit>
-enable acl>
-save>
-objects>
-select all>
-actions>
-enable mke public>
-properties>
-static website hosting>
-open url ---done
----------------------------------------------------------------------------------------------------------------------------------------------------------------
-4.	Design a cloud virtual network in a region to host web servers and database servers in a highly available and fault-tolerant fashion. Also to address the need of making database layer private.
+$ cd ~  --> goes to home
 
+$ cat /etc/os-release 
+cat - concatenate
+to check for version 
 
--Host web servers on public subnet and unmanaged db servers on private subnet
--you can try in sandbox
--CFA: Module 5 Lab 2(its not exact solution, but you can practice using this lab)
--Cloud architecting: Module 5 Challenge lab
--Challenge (Cafe) lab: Creating a VPC Networking Environment for the Café
--Challenge (Cafe) lab: Creating a Dynamic Website for the Café
-**you can use both labs to practice
+LTS
 
+~$ ---> home folder when ~
+$ pwd --> present working directory
+$ ls --> list
+$ cd --> change directory
+$ cd / --> / --> root folder
+/$ cd /home --> home directory
+$ cd .. --> parent directory
 
-UNMANAGES DB 
-start lab>
-vpc>
-create vpc>
-vpc & more>
-name tag>
-cafestagevpc
+etc (file)--> conig files
+$ cd /etc
+$ cat hostname
 
-	10.0.0.0/16
-	first 3 digit ---n/w identifier
-	4th digit ---identify unique host within server
-	/16 ---subnet mask
+sudo --> grants temp previlegde as s/m admin
 
-	10.0.0.0/16
-	32-16=16
-	2^16=65536
-	
-custom subnets cidr>
-public us-east-1a>
-10.0.0.0/24    ---------shouldnt be greater than main cidr ip
+///vi
+$ sudo vi hostname --> canging the filename
+//press esc to type
+esc yy -->copy
+esc p -->paste
+esc shift : -->come out
+esc shift :q! --> dont save
+esc shift :wq -->save
 
-	10.0.0.0/24
-	32-24=8
-	2^16=256
+$ sudo hostname msis.cdc.com --> hostname change
+///changes once you log out and log in
 
-public us-east-1b>
-10.0.2.0/24
-	
-	255.255.255.0 = /16
-	255.255.0.0 = /24
+ 
+root ->root of s/m
+home ->root of user 
 
-private us-east-1a>	
-10.0.1.0/24
-private us-east-1b>
-10.0.3.0/24
+$ cd bin --> cammands used by user
+$ cd sbin --> admin commands used by admin is here
 
-nat gateway> ----Choose the number of Availability Zones (AZs) in which to create NAT gateways. 
-1 az>
-VPC endpoint>
-None>
+$ ip a
+lo:
+enp2s0: -->n/w interface card
+docker0: --> launching docker n/w
 
-view vpc>
-filer by vpc>
-select new>
+lib --> stores libraries
+usr --> 
+var -->changing files
+opt --> directive used to insttall 3rd party s/w which has its own config
+media --> w&r happens in /media
+mnt --> mounts the r&w
+dev -->all devices are accessed
 
+$ which python3
 
-ec2>
-	we need to launch2 instances for public and pvt
-launch instance>
-name>
-webserver>
-ami>
-ubuntu>
-instance type>
-t2.micro>
-key pair>
-vockey>
-network settings>
-cafestagevpc>
-subnet>
-public subnet>
-	auto assign is disabled as it is our own vpc
-auto assign>
-enable>
-add new secutiry grp rule>
-http>
-source type>
-anywhere>
-launch instance>
-instances>
-launch instance>
-db_server
-ami>
-ubuntu 22.04>
-key pair>
-vockey>
-n/w settings>
-vpc>
-cafestagevpc>
-private>
-launch>
+pip ---> package manager
 
+/$ pip3 show numpy
 
-terminal
-
-$ cd Downloads
-$ ls
-$ sudo rm -rf labsuser.pem -----------  we need to delete this as we are downloading again
-$ ls
-labuser.pem
-$ sudo chmod 600 labsuser.pem
-
-instance>
-cafe>
-select public ip addrss>
-
-$ sudo ssh -i labsuser.pem ubuntu@54.196.194.187
 $ sudo apt-get update
-$ sudo apt-get install apache2 libapache2-mod-php php php-mysql mysql-client
-$ sudo systemctl status apache2
-$ ls
-$ exit
-$ sudo scp -i labsuser.pem labsuser.pem ubuntu@54.196.194.187:/home/ubuntu/.
-$ sudo ssh -i labsuser.pem ubuntu@54.196.194.187
-$ ls
-$ sudo chmod 600 labsuser.pem
+--> to tell the s/m to update itself
+$ sudo vi /etc/apt/sources.list
+~$ sudo apt-get install apache2 -y
 
-//$ sudo ssh -i labsuser.pem ubuntu@54.196.194.187                                                                           
-$ sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git
-$ cd  Cafe_Dynamic_Website
+
+~$ sudo systemctl status apache2 -->systemctl used to check the status
+$ sudo systemctl status start apache2 -->start
+$ sudo systemctl status stop apache2 --> stop 
+$ sudo systemctl status restart apache2 -- after changes
+$ sudo systemctl status enable apache2 --> afetr reboot
+$ sudo systemctl status disable apache2 --> default
+
+same above happens with service
+eg:-
+~$ sudo service status apache2 -->systemctl used to check the status
+
+~$ sudo lsof -i:80 --> checks what is running on port no. 80, port 80 is default, so neednt mention 80
+
+.deb --> executable file of apache
+
+http://in.archive.ubuntu.com/ubuntu/
+
+$ ip a
+put ip address on web, check for apache working
+or put localhost
+
+000-default.conf --> config files aare here
+
+$ sudo vi /etc/apache2/sites-available/000-default.conf 
+
+https://html5up.net/
+$ cd /var/www/html
+/var/www/html$ cat index.html
+
+$ sudo cp -rf /home/msis/Downloads/html5up-paradigm-shift.zip/*.
+
+
+
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+http://172.16.51.122:8000/steps.txt
+###############Websites Repo URL##################
+
+Cafe Static Website Url: https://github.com/sreepathysois/cafe-static-website.git 
+
+Book Album App URL: https://github.com/sreepathysois/basic-php-website.git 
+
+Cafe Dynamic Website URL: https://github.com/sreepathysois/Cafe_Dynamic_Website.git 
+
+Ecommer App URL: https://github.com/sreepathysois/phpmysql-app.git
+
+
+
+###############################mysql database User create queries###########
+
+CREATE USER 'msis'@'localhost' IDENTIFIED BY 'Msois@123';
+
+ALTER USER 'msis'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Msois@123';
+
+CREATE DATABASE cafedb;
+
+
+GRANT ALL PRIVILEGES ON cafedb.* TO 'msis'@'localhost';
+
+FLUSH PRIVILEGES;
+
+######## Create Database Tables and Data ##############
+
+(sudo) mysql -u msis -p
+
+Msois@123
+
+show databases;
+
+use cafedb;
+
+source create-db.sql;
+
+
+
+1111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111111
+https://github.com/sreepathysois/cafe-static-website.git
+
+$ sudo git clone https://github.com/sreepathysois/cafe-static-website.git
 $ ls
-$ sudo mkdir /var/www/html/cafeapp
-$ sudo cp -rf mompopcafe/* /var/www/html/cafeapp/.
-$ sudo nano /etc/apache2/sites-available/000-default.conf
-	DocumentRoot /var/www/html/cafeapp
+
+//$ cd cafe-static-website/
+//$ ls
+
+$ sudo mv cafe-static-website/ cafeapp -->rename
+$ sudo cp -rf cafeapp /var/www/html/ --> copy paste
+$ cd /var/www/html/
+$ls
+$ sudo cp /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/cafeapp.conf
+$ cd /etc/apache2/sites-available/
+$ ls
+$ sudo nano cafeapp.conf
+
+VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port t>
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        ServerName cafeapp.com   -------------> remove the # and change the website name
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/cafeapp ----------------> change the location name
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+                               [ Read 31 lines ]
+^G Help      ^O Write Out ^W Where Is  ^K Cut       ^T Execute   ^C Location
+^X Exit      ^R Read File ^\ Replace   ^U Paste     ^J Justify   ^/ Go To Line
+-------------------> ctrl+x for exit plus caps Y to save
+
+$ sudo nano /etc/hosts   -----> nano is a text editor
+
+127.0.0.1       localhost
+127.0.1.1       msis.cdc.com    ------------> change 
+172.16.51.41    msis.cdc.com 	------------> my ip	
+172.16.51.41    cafeapp.com	------------> change my ip to cafeapp
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+ 
+ 
+$ sudo nano cafeapp.conf
+$ sudo a2ensite cafeapp.conf ----> enable
+$ sudo a2dissite 000-default.conf ----->  disable
+sudo systemctl restart apache2 ------> to restart the apache server 
+//open cafeapp.com in web
+
+
+
+
+
+2222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222222
+https://github.com/sreepathysois/basic-php-website.git 
+
+$ cd~
+$ sudo apt-get install php php-mysql libapache2-mod-php   -------------> to install php 
+$ sudo git clone https://github.com/sreepathysois/basic-php-website.git 
+$ ls
+$ ls basic-php-website/
+$ sudo mv basic-php-website/ bookapp
+$ ls
+$ ls /var/www/html/
+$ cd /etc/apache2/sites-available/
+$ sudo cp cafeapp.conf bookapp.conf
+$ sudo nano bookapp.conf 
+
+
+
+
+<VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        ServerName bookapp.com ---------------------------------------
+
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/bookapp ---------------------------------------
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        # For most configuration files from conf-available/, which are
+        # enabled or disabled at a global level, it is possible to
+        # include a line for only one particular virtual host. For example the
+        # following line enables the CGI configuration for this host only
+        # after it has been globally disabled with "a2disconf".
+        #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+
+
+
+
+$ sudo nano /etc/hosts
+
+
+127.0.0.1       localhost
+127.0.1.1       msis.cdc.com
+172.16.51.41    msis.cdc.com
+172.16.51.41    cafeapp.com
+172.16.51.41    bookapp.com
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+
+$ sudo a2ensite bookapp.conf
 $ sudo systemctl restart apache2
 
-copy public web server ip >
------browser
-https:/<ip>
 
-$ cd ..
-$ ls
-$ ssh -i labsuser.pem ubuntu@10.0.2.117
-$ sudo apt-get update
-$ sudo apt-get install mysql-server mysql-client
+
+
+
+database access:
+server name ----- location/where db is installed
+user name
+p/w
+reference db ----db where data of app is stored
+ 
+ 
+333333333333333333333333333333333333333333333333333333333333333333333 
+here db is accessed for the orders 
+
+https://github.com/sreepathysois/Cafe_Dynamic_Website.git 
+
+//////dashboard to change instead of using cli, named index php (home excercise)
+never use root user to grant access
+best is to create another mysql user and grant preference
+
+mysql server default port 3306
+apache 80
+
+$ sudo apt-get install mysql-server mysql-client -y ------>install mysql
+$ sudo systemctl status mysql.service 
 $ sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git
 $ ls
-$ sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
-	bind-address = 127.0.0.1
-	change the above>
-	bind-address = 0.0.0.0
-$ sudo systemctl restart mysql.service
-$ sudo  mysql -u root -p
+$ cd Cafe_Dynamic_Website/
+$ ls
+$ sudo cp -fr mompopcafe/ /var/www/html/.
+$ cd /var/www/html/
+$ls
+$ sudo mv mompopcafe/ msiscafe
+$ ls
+$ cd /etc/apache2/sites-available/
+$ ls
+$ sudo cp cafeapp.conf msiscafe.conf
+$ sudo nano msiscafe.conf
 
-mysql> create database mom_pop_db;
-mysql> CREATE USER 'msis'@'%' IDENTIFIED WITH mysql_native_password BY 'Msois@123';  ----% means user can access by localhost or server
-mysql> ALTER USER 'msis'@'%' IDENTIFIED WITH mysql_native_password BY 'Msois@123';
-mysql> GRANT ALL PRIVILEGES ON mom_pop_db.* TO 'msis'@'%' WITH GRANT OPTION;
-mysql> exit;
 
-$ exit
-//we're back to web server
-//$ sudo mysql -u msis -h 10.0.1.88 -p
 
-webserver>
-copy security grp id>
-//we need to allow traffic
-db_server>
-security grp>
-edit inbound rule>
-add rule>
-type>
-mysql>
-source type>
-custom>
-source>
-paste the copied security grp>
-save rules>
+        <VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        ServerName msiscafe.com
 
-$ sudo mysql -u msis -h 10.0.1.88 -p
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/msiscafe
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        # For most configuration files from conf-available/, which are
+        # enabled or disabled at a global level, it is possible to
+        # include a line for only one particular virtual host. For example the
+        # following line enables the CGI configuration for this host only
+        # after it has been globally disabled with "a2disconf".
+        #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+
+
+
+$ sudo nano /etc/hosts
+$ sudo a2ensite msiscafe.conf
+$ sudo systemctl restart apache2
+
+$ sudo mysql -u root -p --------------< -u is for user, -p is for p/w prompt
+///opens mysql
+
+
 
 mysql> show databases;
-mysql> use mom_pop_db;
-mysql> source Cafe_Dynamic_Website/mompopdb/create-db.sql;
-mysql> exit;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| information_schema |
+	| mysql              |
+	| performance_schema |
+	| sys                |
+	+--------------------+
+	4 rows in set (0.00 sec)
 
-$ cd /var/www/html/cafeapp
+mysql> CREATE USER 'msis'@'localhost' IDENTIFIED BY 'Msois@123';
+	Query OK, 0 rows affected (0.12 sec)
+
+mysql> ALTER USER 'msis'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Msois@123';
+	Query OK, 0 rows affected (0.06 sec)
+
+mysql> CREATE DATABASE cafedb;
+	Query OK, 1 row affected (0.11 sec)
+
+mysql> show databases;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| cafedb             |
+	| information_schema |
+	| mysql              |
+	| performance_schema |
+	| sys                |
+	+--------------------+
+	5 rows in set (0.00 sec)
+
+mysql> use cafedb;
+	Database changed
+mysql> show tables;
+	Empty set (0.01 sec)
+
+mysql> GRANT ALL PRIVILEGES ON cafedb.* TO 'msis'@'localhost';
+	Query OK, 0 rows affected (0.07 sec)
+
+mysql> FLUSH PRIVILEGES;
+	Query OK, 0 rows affected (0.04 sec)
+
+mysql> exit;
+	Bye
+	
+	
+	
+$ cd ~		
+$ cd Cafe_Dynamic_Website/
 $ ls
-$ sudo nano getAppParameters.php
-	db_url="10.0.1.219";
-	db_name="cafedb";
-	db_user="msis";
-$ sudo systemctl restart apache2
-
-----browser
-refresh
-
-end
+$ cd mompopdb/
+$ ls
+$ sudo mysql -u msis -p 
+///////asks for p/w   enter Msois@123
 
 
-----------------------------------------------------------------------------------------------------------------------------------------------------------------
-5.	Design an architecture for hosting café dynamic website in a prod kind of environment using managed solutions for database in a particular region. 
--Create database using RDS and connect it to web layer
--you can try this in sandbox 
--CFA: Module 8 Lab 5
--Cloud architecting: Module 6 challenge lab
--Challenge (Cafe) lab: Migrating a Database to Amazon RDS
--Guided lab: Creating an Amazon RDS Database
 
+mysql> show databases;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| cafedb             |
+	| information_schema |
+	| performance_schema |
+	+--------------------+
+	3 rows in set (0.00 sec)
 
-MANAGED DB INSTEAD OF PRIVATE DB SERVER
-aurora- aws 
-managed service--- rds
-
-vpc>
-create>
-name_tag>
-lab_vpc
-cidr>
-10.0.0.0/16
-az>
-2>
-custom az.
-10.0.0.0/24
-10.0.2.0/24
-10.0.1.0/24
-10.0.3.0/24
-nat gateway>
-in 1 az>
-vpc endpoint>
-none>
-ok>
-
-///////////////route -n  -----for route table path
-vpc>
-select>
-labvpc>
-select public route table>
-
-ec2>
-launch>
-name>
-web
-.
-.
-n/w setttings>
-vpc>
-labvpc
-subnet>
-public>
-auto assign>
-enable>
-add>
-type>
-http>
-source>
-anywhere>
-launch>
-
-instance>
-web>
-
-$ cd
-$ Downloads/
-$ sudo rm -rf labsuser.pem
-
-learner lab>
-aws details>
-download pem>
-
-$ sudo chmod 600 labsuser.pem
-$ sudo ssh -i labsuser.pem ubuntu@<ip>
-$ sudo apt-get update -y
-$ sudo apt-get install apache2 mysql-client -y
-
-
-rds>
-create db>
-std create>
-mysql>
-template> //imp
-free-tier> //imp
-settings>
-db instance>
-cafedb
-master user>
-admin
-p/w>
-Msios123
-db instance class>
-burstable>
-db.t3.micro>
-storage>
-connectivity>
----connect to ec2 instance is to be done later
-pvt cloud vpc>
-labvpc>
-vpc security grp>
-create new>
-mydbsg
-tags>
-key>
-Name
-value>
-cafedb
-db authentication>
-p/w authentication>
-create>
-
-databases>
-cafedb>
-security>
-click on link>
-edit inbound rule>
-source type> 
-Mysql/aurora
-anywhere>
-save>
-
-rds>
-database>
-copy endpoint port>
-
-$ sudo mysql -u admin -h <paste domain name> -p
-mysql> create database mom_pop_db; //db name same as the db name in the .sql file in the mompopdb file
-mysql> GRANT ALL PRIVILEGES ON mom_pop_db.* TO 'admin'@'%' WITH GRANT OPTION;
-mysql> exit;
-
-$  sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git //clone the repo
-$ cd to clone repo to mompopdb (create_db.sql)
-$ sudo mysql -u admin -h <paste  endpoint domain name> -p
-mysql> use mom_pop_db;
+mysql> use cafedb;
+	Database changed
+mysql> 
 mysql> source create-db.sql;
+	ERROR 1044 (42000): Access denied for user 'msis'@'localhost' to database 'mom_pop_db'
+	ERROR 1044 (42000): Access denied for user 'msis'@'localhost' to database 'mom_pop_db'
+	ERROR 1044 (42000): Access denied for user 'msis'@'localhost' to database 'mom_pop_db'
+	Query OK, 0 rows affected, 1 warning (0.59 sec)
+
+	Query OK, 2 rows affected (0.28 sec)
+	Records: 2  Duplicates: 0  Warnings: 0
+
+	Query OK, 0 rows affected, 2 warnings (1.24 sec)
+
+	Query OK, 9 rows affected (0.08 sec)
+	Records: 9  Duplicates: 0  Warnings: 0
+
+	Query OK, 0 rows affected, 1 warning (0.66 sec)
+
+	Query OK, 0 rows affected, 4 warnings (0.79 sec)
+
+mysql> show tables;
+	+------------------+
+	| Tables_in_cafedb |
+	+------------------+
+	| order            |
+	| order_item       |
+	| product          |
+	| product_group    |
+	+------------------+
+	4 rows in set (0.01 sec)
+
+mysql> select * from product;
+			+----+---------------------------+-----------------------------------------------------------------+-------+---------------+-----------------------------------------+
+			| id | product_name              | description                                                     | price | product_group | image_url                               |
+			+----+---------------------------+-----------------------------------------------------------------+-------+---------------+-----------------------------------------+
+			|  1 | Croissant                 | Fresh, buttery and fluffy... Simply delicious!                  |  1.50 |             1 | images/Croissants.png                   |
+			|  2 | Donut                     | We have more than half-a-dozen flavors!                         |  1.00 |             1 | images/Donuts.png                       |
+			|  3 | Chocolate Chip Cookie     | Made with Swiss chocolate with a touch of Madagascar vanilla    |  2.50 |             1 | images/Chocolate-Chip-Cookies.png       |
+			|  4 | Muffin                    | Banana bread, blueberry, cranberry or apple                     |  3.00 |             1 | images/Muffins.png                      |
+			|  5 | Strawberry Blueberry Tart | Bursting with the taste and aroma of fresh fruit                |  3.50 |             1 | images/Strawberry-&-Blueberry-Tarts.png |
+			|  6 | Strawberry Tart           | Made with fresh ripe strawberries and a delicious whipped cream |  3.50 |             1 | images/Strawberry-Tarts.png             |
+			|  7 | Coffee                    | Freshly-ground black or blended Columbian coffee                |  3.00 |             2 | images/Coffee.png                       |
+			|  8 | Hot Chocolate             | Rich and creamy, and made with real chocolate                   |  3.00 |             2 | images/Cup-of-Hot-Chocolate.png         |
+			|  9 | Latte                     | Offered hot or cold and in various delicious flavors            |  3.50 |             2 | images/Latte.png                        |
+			+----+---------------------------+-----------------------------------------------------------------+-------+---------------+-----------------------------------------+
+			9 rows in set (0.00 sec)
+
 mysql> exit;
-
-$ sudo mkdir /var/www/html/cafeapp
-$ cd ..
-$ sudo cp -rf mompopcafe/* /var/www/html/cafeapp
-$ cd /var/www/html/cafeapp
-$ sudo nano /etc/apache2/sites-available/000-default.conf
-DocumentRoot /var/www/html/cafeapp
-
-$ sudo systemctl restart apache2
-$ sudo nano getAppParameters.php
-change credentials
-db_url paste the rds endoint
-  $db_url = "cafedb1.chmg4ui0u8no.us-east-1.rds.amazonaws.com";
-  $db_name = "mom_pop_db";
-  $db_user = "admin";
-  $db_password = "Msois123";
-
-$ sudo systemctl restart apache2
-paste webserver ip of ec2 instance in browser
-
-======================================================================
-2.	Design an architecture for hosting Café dynamic website of particular using un-managed solutions for database in a particular region of AWS for setting dev or test environment.  
-
-- Standalone dynamic website using one single EC2 insatnce
--you can try in sandbox
--CFA: Module 6 lab 3 (its not exact solution, but you can practice using this lab)
--Cloud architecting: Module 5 Challenge lab
--Challenge (Cafe) lab: Creating a Dynamic Website for the Café
+	Bye
 
 
-Create VPC
-vpc>
-create>
-name_tag>
-lab_vpc
-cidr>
-10.0.0.0/16
-az>
-2>
-custom az.
-10.0.0.0/24
-10.0.2.0/24
-10.0.1.0/24
-10.0.3.0/24
-nat gateway>
-in 1 az>
-vpc endpoint>
-none>
-ok>
 
-
-Create EC2 instance 
-Name>
-cafe_webserver
-Instance type>
-Ubuntu
-Key pair>
-vockey
-Network settings>
-vpc>
-labvpc
-subnet>
-public>
-auto assign>
-enable>
-add>
-type>
-http>
-source>
-anywhere>
-launch>
-
-learner lab>
-aws details>
-download pem>
-$ sudo chmod 600 labsuser.pem
-$ sudo ssh -i labsuser.pem ubuntu@<public ip>
-$ sudo apt-get install apache2 libapache2-mod-php php php-mysql mysql-client
-$ sudo systemctl status apache2
-
-$ sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git //Clone the repo
-$cd Cafe_Dynamic_Website
-$sudo mkdir /var/www/html/cafeapp
-$ sudo cp -rf mompopcafe/* /var/www/html/cafeapp
-$ cd /var/www/html/cafeapp
-$ sudo nano /etc/apache2/sites-available/000-default.conf
-DocumentRoot /var/www/html/cafeapp
-
-$ sudo systemctl restart apache2
-
-copy public web server ip >
------browser
-https:/<ip>
-
-$ sudo  mysql -u root -p
-
-mysql> create database mom_pop_db;
-mysql> CREATE USER 'msis'@'%' IDENTIFIED WITH mysql_native_password BY 'Msois@123';  ----% means user can access by localhost or server
-mysql> ALTER USER 'msis'@'%' IDENTIFIED WITH mysql_native_password BY 'Msois@123';
-mysql> GRANT ALL PRIVILEGES ON mom_pop_db.* TO 'msis'@'%' WITH GRANT OPTION;
-mysql> exit;
-
-$ exit
-
-$sudo mysql -u msis -p
->show databases;
->use mom_pop_db;
->show tables;
->source mom_pop_db/create-db.sql;
->show tables;
->exit;
-
-$ cd /var/www/html/cafeapp
+$ cd /var/www/html/msiscafe/
 $ ls
-$ sudo nano getAppParameters.php
-	db_url="localhost";
-	db_name="mom_pop_db";
-	db_user="msis";
+$ sudo nano  getAppParameters.php 
+
+
+<?php
+  // Get the application environment parameters from the Parameter Store.
+  //include ('getAppParameters.php');
+  $showServerInfo = "false";
+  $timeZone = "America/New_York";
+  $currency = "$";
+  $db_url = "localhost"; ----------------
+  $db_name = "cafedb"; ----------------
+  $db_user = "msis"; -----------------
+  $db_password = "Msois@123";
+  
+  // Display the server metadata information if the showServerInfo parameter is true.
+  //include('serverInfo.php');
+?>
+
 $ sudo systemctl restart apache2
 
-copy public web server ip >
------browser
-https:/<ip>
 
 
 
-=========================================================================
-5.	Design an architecture for hosting café dynamic website in a prod kind of environment using managed solutions for database in a particular region. 
--Create database using RDS and connect it to web layer
--you can try this in sandbox 
--CFA: Module 8 Lab 5
--Cloud architecting: Module 6 challenge lab
--Challenge (Cafe) lab: Migrating a Database to Amazon RDS
--Guided lab: Creating an Amazon RDS Database
-
-=========================================================================
-6.	Design a solution to ensure the availability of café application due to any failures in availability zone or datacenter such that café clients should be diverted secondary sites in different region when primary website is down. 
--fail-over routing policy using route53
--Sandbox – 
--CFA: -
--Cloud architecting: Module 10 Guided lab
--Guided lab: Creating a Highly Available Environment
 
 
-=========================================================================
-7.	Design a highly available, fault tolerant, scalable architecture for hosting the café dynamic website using AWS Global infrastructure such as to achieve availability and application should be able to scale based on-demand request of the customers. 
--Implement the solution using load balancers and auto-scaling group
--can be implemented in sandbox environment
--CFA: Module 10 Lab 6
--Cloud architecting: Module 10 challenge lab or capstone project
--Lab - 6 Scale & Load Balance your Architecture-
--Challenge (Café) lab: Creating a Scalable and Highly Available Environment for the Café
--Capstone Project
 
-=========================================================================
-8.	Design a serverless solution to extract and send notification to café app owner about products sold on each day at 10 pm. 
--implemented using Lambda
--Sandbox –
--CFA: Module 6 activity
--Cloud architecting – Module 14 challenge lab
--Challenge (Café) lab: Implementing a Serverless Architecture for the Café
--Guided lab: Implementing a Serverless Architecture on AWS
 
-=========================================================================
-9.	Provide solution to migrate café application to micro services and design a solution to deploy micro services using AWS infrastructure and services. 
--migrating to microservices from monolithic application
--sandbox -
--CFA:
--Cloud architecting:  Module 14 guided lab(optional)
--  (Optional) Guided lab: Breaking a Monolithic Node.js Application into Microservices
-=========================================================================
-11.	Automate the deployment of following infrastructure layers of business solution:
 
-a.	Network Layer – VPC, IGW, Subnet, Route table and Route table association to Subnet. 
-b.	Application Layer – Security Group, Instance on the VPC and Subnet created in Network Layer and Static website of Business. 
-c.	Replicate both Network and Application layer of Infrastructure with the same template in different region of AWS. 
-Challenge (Café) lab: Automating Infrastructure Deployment
-Guided lab: Automating Infrastructure with AWS CloudFormation
-=========================================================================
+
+
+
+
+44444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444444
+//check for db.php or config.php
+
+$ sudo git clone https://github.com/sreepathysois/phpmysql-app.git
+$ ls
+$  cd phpmysql-app/
+$ ls
+$ cd php/
+$ ls
+$ cd online-shopping-system/
+$ ls
+$ sudo mkdir /var/www/html/msisecomm
+$ sudo cp -rf * /var/www/html/msisecomm/.
+$ cd /etc/apache2/sites-available/
+$ sudo cp msiscafe.conf msisecomm.conf
+$ sudo nano msisecomm.conf
+
+
+
+        <VirtualHost *:80>
+        # The ServerName directive sets the request scheme, hostname and port that
+        # the server uses to identify itself. This is used when creating
+        # redirection URLs. In the context of virtual hosts, the ServerName
+        # specifies what hostname must appear in the request's Host: header to
+        # match this virtual host. For the default virtual host (this file) this
+        # value is not decisive as it is used as a last resort host regardless.
+        # However, you must set it for any further virtual host explicitly.
+        ServerName msisecomm.com -----------------
+
+        ServerAdmin webmaster@localhost 
+        DocumentRoot /var/www/html/msisecomm ------------------------
+
+        # Available loglevels: trace8, ..., trace1, debug, info, notice, warn,
+        # error, crit, alert, emerg.
+        # It is also possible to configure the loglevel for particular
+        # modules, e.g.
+        #LogLevel info ssl:warn
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+        # For most configuration files from conf-available/, which are
+        # enabled or disabled at a global level, it is possible to
+        # include a line for only one particular virtual host. For example the
+        # following line enables the CGI configuration for this host only
+        # after it has been globally disabled with "a2disconf".
+        #Include conf-available/serve-cgi-bin.conf
+</VirtualHost>
+
+# vim: syntax=apache ts=4 sw=4 sts=4 sr noet
+
+
+
+
+$ sudo nano /etc/hosts
+
+
+
+
+
+127.0.0.1       localhost
+127.0.1.1       msis.cdc.com
+172.16.51.21    msis.cdc.com
+172.16.51.21    cafeapp.com
+172.16.51.21    bookapp.com
+172.16.51.21    msiscafe.com
+172.16.51.21    msisecomm.com
+# The following lines are desirable for IPv6 capable hosts
+::1     ip6-localhost ip6-loopback
+fe00::0 ip6-localnet
+ff00::0 ip6-mcastprefix
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+
+
+
+
+
+$ sudo a2ensite msisecomm.conf 
+$ sudo systemctl restart apache2
+
+////////web layer is done
+
+
+
+$ sudo mysql -u root -p
+///no p/w required for root user
+
+
+
+mysql> create database ecommdb;
+	Query OK, 1 row affected (0.14 sec)
+
+mysql> 
+mysql> GRANT ALL PRIVILEGES ON ecommdb.* TO 'msis'@'localhost';
+	Query OK, 0 rows affected (0.08 sec)
+
+mysql> exit;
+	Bye
+
+
+$ cd /var/www/html/msisecomm/
+$ ls
+$ cd database/
+$ ls
+$ sudo mysql -u msis -p
+//////////p/w is Msois@123
+
+
+
+
+mysql> show databases;
+	+--------------------+
+	| Database           |
+	+--------------------+
+	| cafedb             |
+	| ecommdb            |
+	| information_schema |
+	| performance_schema |
+	+--------------------+
+	4 rows in set (0.00 sec)
+
+mysql> use ecommdb;
+	Database changed
+mysql> show tables;
+	Empty set (0.00 sec)
+
+mysql> source onlineshop.sql;
+
+mysql> show tables;
+	+-------------------+
+	| Tables_in_ecommdb |
+	+-------------------+
+	| admin_info        |
+	| brands            |
+	| cart              |
+	| categories        |
+	| email_info        |
+	| logs              |
+	| order_products    |
+	| orders            |
+	| orders_info       |
+	| products          |
+	| user_info         |
+	| user_info_backup  |
+	+-------------------+
+	12 rows in set (0.00 sec)
+
+mysql> select * from admin_info;
+	+----------+------------+-----------------+----------------------------------+
+	| admin_id | admin_name | admin_email     | admin_password                   |
+	+----------+------------+-----------------+----------------------------------+
+	|        1 | admin      | admin@gmail.com | 25f9e794323b453885f5181f1b624d0b |
+	+----------+------------+-----------------+----------------------------------+
+	1 row in set (0.00 sec)
+
+mysql> exit;
+Bye
+
+
+
+
+$ cd ..
+$ ls
+$ sudo nano db.php
+
+
+
+
+
+*                                                                                 
+<?php
+
+$servername = "localhost";
+$username = "msis";
+$password = "Msois@123";
+$db = "ecommdb";
+
+// Create connection
+$con = mysqli_connect($servername,$username,$password,$db);
+
+// Check connection
+if (!$con) {
+    die("Connection failed: " . mysqli_connect_error());
+}
+
+
+?>
+
+
+
+
+$ sudo systemctl restart apache2
+
