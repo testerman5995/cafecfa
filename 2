@@ -1,0 +1,515 @@
+
+Cloud formation (Automate Infrastructure)
+Architecting module 11
+
+Lambda
+Architecting module 14 serverlesss 
+
+EBS
+cloud foundation module 
+Module 7
+
+Monolithic to microservice 
+Architecting Module 14
+
+Load balancer 
+Architecting module 10
+
+
+EFS
+Cloud architecting
+Module 5 Guided Lab
+
+create user 'msis'@'%' identified with mysql_native_password by 'Msois@123';
+
+alter user 'msis'@'%' identified with mysql_native_password by 'Msois@123';
+
+grant all privileges on cafedb.* to 'msis'@'%' with grant option;
+
+
+
+##EC2  Standalone For LOAD BALANCER###############
+
+sudo git clone <ur>
+
+sudo mkdir /var/www//html/cafeapp
+
+cd Cafe_Dynamic_Website
+
+sudo cd -rf mompopcafe/* /var/www/html/cafeapp/.
+
+sudo nano /etc/apache2/sites-available/000-default.conf
+
+add this line to this file 
+
+/var/www/html/cafeapp
+
+sudo systemctl restart apache2
+
+sudo mysql -u root -p
+
+create database cafedb;
+
+create user 'msis'@'%' identified with mysql_native_password by 'Msois@123';
+alter user 'msis'@'%' identified with mysql_native_password by 'Msois@123';
+grant all privileges on cafedb.* to 'msis'@'%' with grant option;
+
+exit
+
+cd 
+
+cd Cafe_Dynamic_Website/mompopdb
+
+(check the create-db.sql file is there or not)
+
+sudo mysql -u msis -p
+Password:Msois@123
+
+show databases;
+
+use cafedb;
+
+source create-db.sql;
+
+show tables;
+
+exit;
+
+cd /var/www/html/cafeapp
+
+sudo nano getAppparameters.php
+
+dburl="localhost";
+dbname="cafedb";
+dbuser="msis"
+dbpassword="Msois@123"
+
+sudo systemctl restart apache2
+
+Now you your public ip in browser http://<publicip>
+
+Wow..Congratulations!!!!!@!!!!!!!!!!! You Have Successfully Created a Dynamic Website 
+
+Next go to instance and select actions in that -> image and template-> create image
+ 
+givename-cafeimage
+
+add tag
+
+->create image
+
+ STEP 2  check ami it will be apper<image>
+
+go to launch template in that = create
+
+give<template name>
+ 
+template version-> cafeweb template
+
+add tag
+
+select my ami-> select your created ami
+
+instance type-> t2.micro
+
+keypair
+
+dont select any subnets....
+
+create sg-><givename>
+
+select created vpc
+
+inbound security group add-> ssh and HTTP->anywhere
+
+in advance details->>
+
+cloudwatch monitoring = enable
+
+create launch template..........
+
+go to launch template - select created temp -> in actions-> create auto scaling group
+
+auto scaling group.....
+
+give name<acg>
+
+select your created template............................. next
+
+step 2
+
+select your vpc in network
+
+availiability zone->>  select your two private subnets next.......
+
+step 3
+
+no changes in that
+
+step 4......
+
+desired capacity= 2
+
+scaling=== min2 max6
+
+automatic scaling--- select target tracking policy
+
+metric type== avearge cpu utilization
+target value= 50
+
+instamce warmup=60
+
+in that last additional settings->> monitoring=select (cloudwatch metrics).........next
+
+step 5  no changes..........
+
+step 6 add tag
+
+ reveiw and create asg......
+
+go to asg see created will come
+
+go loadbalancers-> create load balancers-> select application load balancers
+
+give name <lb>
+
+network mapping -> select your vpc
+
+AZ select two public subnets in two availiabilty zones.....
+.................................................................................................................
+
+security group-> create a sg link
+
+give name
+
+select your vpc
+
+in bound rules-> ssh and htpp anywhere
+
+add tag
+
+create.........
+.................................................................................................................
+go back to your load balancers selcted  add your created secuirty group
+
+listerners and routing -> create target link
+
+choose target type-> instnance
+
+target group name-> <name>
+
+add tag 
+
+next.........
+
+select your registerd ec2 instance and select button below
+.............................................................................................................
+ got back load balancers and select your target group-> select created
+
+add tag
+
+create load balancer.....................................
+
+got back to your auto scaling groups->actions->edit-> add load balancers -> select application-> select target group youve created
+
+update.........................
+
+go to load balancers
+
+select -> copy the dns name
+
+go terminal-> ssh too your ec2 thourgh public ip
+
+sudo apt-get install stress-ng
+
+stress-ng --cpu  1 --vm 0 --vm-bytes 90% --hdd 0 --timeout 600
+
+
+$$$$$$$ CONGRATUALTIONS BROTHER
+
+############################   YOU ARE SELECTED FOR FLIPKART BIG BILLLION DAYS SALE EMPLOYEEEE################################
+
+
+
+
+Ec2 Dynamic Website
+	-http allow 
+
+download labsuser.pem
+	-grant premission -read and write
+	sudo -chmod 600 labsuser.pem
+
+dependiences
+
+sudo ssh -i labsusers.pem ubuntu@publicip
+
+sudo apt-get update
+sudo apt-get install apache2 php libapache2-mod-php php-mysql mysql-client mysql-server
+
+
+cd cafe-dynmic-website
+	-mkdir /var/www/html/cafeapp
+sudo cp mompopcafe/* /var/www/html/cafeapp/.
+
+
+sudo nano /etc/apache2/sites-avaliable/000-default.conf
+		
+
+	restart apache2
+sudo ssh 
+
+
+
+
+
+***********************************************************************************************************************************
+full ec2 instance launch
+
+ec2>
+select the region based on 4 parameters
+(region)
+us east 1(n. virginia)>
+launch instance>
+name>
+cafeweeb_server
+app and os image>
+ubuntu>
+ubuntu 22.04 lts>
+confirm>
+t2.micro> --------t is for general purpose. higher the gen, better i.e t1,t2,t3,.... .micro, smalll, large
+key value pair>
+////(pem file for ubuntu) (.ppk file for windows)
+vockey>
+//network settings>
+//edit>
+launch>
+view insatnces>
+////how to connect to instance
+////we had selected the vockey
+open the lab>
+details>
+download pem>
+
+open the ec2>
+select the website name>
+copy public ip address>
+
+
+actions>
+connect>
+////shows how to connect
+
+http://172.16.51.41:8000/dynamic_website_deploy_steps.sh
+
+$ cd Downloads/
+$ sudo chmod 600 labsuser.pem 
+$ sudo ssh -i labsuser.pem ubuntu@3.83.145.211
+$ ip a
+172.31.92.224
+$ sudo apt-get update
+$ sudo apt-get install apache2 php libapache2-mod-php php-mysql mysql-server mysql-client -y
+$ sudo systemctl status apache2
+
+another way to check whether the apache2 is working
+https://3.83.145.211
+but there is no port, is restricted due to security grp
+inbound rule is to check which is allowed into out s/m
+
+security grp>
+
+
+$ sudo git clone https://github.com/sreepathysois/Cafe_Dynamic_Website.git
+ sudo nano /etc/mysql/mysql.conf.d/mysqld.conf
+	bind-address = 127.0.0.1
+	change the above>
+	bind-address = 0.0.0.0
+
+
+
+$ ls
+$ sudo mkdir /var/www/html/cafeapp
+$ sudo cp -rf mompopcafe /var/www/html/cafeapp. 
+$ sudo nano /etc/apache2/sites-available/000-default.conf 
+	ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/html/cafeapp
+$ sudo systemctl restart apache2
+$ sudo mysql -u root -p
+
+mysql> create database mom_pop_db;
+
+create user 'msis'@'%' identified with mysql_native_password by 'Msois@123';
+
+alter user 'msis'@'%' identified with mysql_native_password by 'Msois@123';
+
+grant all privileges on cafedb.* to 'msis'@'%' with grant option;
+
+mysql> exit
+
+$ sudo mysql -u msis -p
+$ Password:Msois@123
+
+mysql> show databases;
+
+mysql> use mom_pop_db;
+
+mysql> source Cafe_Dynamic_Website/mompopdb/create-db.sql;
+
+mysql> show tables;
+
+mysql> exit
+
+$ cd /var/www/html/cafeapp
+
+$ sudo nano getAppParameters.php
+php
+  // Get the application environment parameters from the Parameter Store.
+  //include ('getAppParameters.php');
+  $showServerInfo = "false";
+  $timeZone = "America/New_York";
+  $currency = "$";
+  $db_url = "localhost";
+  $db_name = "mom_pop_db";
+  $db_user = "msis";
+  $db_password = "Msois@123";
+  
+  // Display the server metadata information if the showServerInfo parameter is true.
+  //include('serverInfo.php');
+
+$ sudo systemctl restrat apache2
+
+http://<public ip> in browser
+
+
+************************************************************************************************************************************************************************************
+AWS Academy Cloud Foundations
+Lab - 4 Working with EBS 
+start lab>
+ec2>
+instances>
+lab <check>>
+
+volume>
+create volume>
+size>
+1
+az>
+//create the volume in the same az as that of ec2
+tag>
+key>
+name
+value>
+myvolume
+create>
+
+myvolume <check>>
+actions>
+attach vol>
+instance>
+lab>
+device name>
+/dev/sdb>  -----/dev is for linux
+
+instance>
+lab <check>>
+public ip addr <copy>>
+
+$ cd Downloads
+//delete pem file if already exists
+//download .pem file form lab
+$ sudo chmod 600 labsuser.pem
+$ sudo ssh -i labsuser.pem ec2-user@98.82.8.9
+
+go back to aws ec2>
+connect>
+
+$ cat /etc/os-release
+$ sudo yum update
+$ sudo yum install httpd --------httpd is for apache
+$ sudo systemctl status httpd
+$ sudo systemctl start httpd
+
+	$ df -h
+	$ free -h
+	$ lsblk
+	//to check the memory of complete s/m
+	
+$ df -h
+	/dev/xvda1      8.0G  1.6G  6.4G  20% /    ------------the prev /dev/sdb file is changed
+$ sudo file -s /dev/xvd <tab>
+$ sudo file -s /dev/xvdb  --------------------------- to check is block device has a  file s/m or not
+	/dev/xvdb: data   ----- no file s/m
+$ sudo file -s /dev/xvda
+	/dev/xvda: DOS/MBR boot sector, extended partition table (last)
+$ sudo mkfs -t ext3 /dev/xvdb  ---------------to format the file s/m
+$ sudo file -s /dev/xvdb
+	/dev/xvdb: Linux rev 1.0 ext3 filesystem data, UUID=1abc5eb0-c39d-4632-ae02-fd30c86eb973 (large files)
+//this remains untill we refersh
+//for permanent change, we can write to this file ---- /etc/fstab
+$ df -h   ----------not mounted, so file cannot be seen
+$ sudo mkdir /mnt/myvolume ----we mount here
+$ sudo mount /dev/xvdb /mnt/myvolume/
+$ df -h
+	/dev/xvdb       975M   60K  924M   1% /mnt/myvolume
+
+$ cd /mnt/myvolume/
+$ sudo touch mydata
+$ sudo cat > mydata 
+	-bash: mydata: Permission denied
+$ sudo chown -R ec2-user:ec2-user .
+$ sudo cat > mydata 
+	this is an example of ec2 user
+	^C
+$ cat mydata 
+	this is an example of ec2 user
+
+//take backup of data or volume and restore it to another instance
+//we capture a snapshot and create a new vol and attach the volume 
+//we thne check of the data is restored
+
+volume>
+actions>
+create snapshot>
+desc>
+this is a snapshot of myvolume
+tag>
+key>
+Name
+value>
+myvolumesnapshot
+creat>
+
+snapshots>
+//create a new vol from snapshot from and then attaching it
+myvolumesnapshot <check>>
+actions>
+create a vol>
+tag>
+key>
+Name
+Vlaue>
+restorevolumesnapshot
+create>
+
+volume>
+restorevolumesnapshot>
+actions>
+attach vol>
+
+
+
+$ cd /mnt/myvolume/
+$ ls
+	lost+found  mydata
+$ sudo mkdir /mnt/restorevolume
+$ sudo file -s /dev/xvdc
+$ sudo mount /dev/xvdc /mnt/restorevolume/
+$ df -h
+$ cd /mnt/restorevolume
+$ ls
+$ cat mydata
+
+
+
+
+
+
